@@ -12,3 +12,6 @@ __pycache__/
 
 # Ignore IDE files
 .vscode/
+
+# Mac OS
+.DS_Store
