@@ -1,0 +1,14 @@
+# Ignore the folder with the generated files
+clips/
+
+# Ignore secrets
+.env
+
+# Ignore cached Python files
+__pycache__/
+
+# Ignore the virtual environment
+.venv/
+
+# Ignore IDE files
+.vscode/
