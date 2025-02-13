@@ -1,4 +1,10 @@
+"""
+This module provides translation functionality using OpenAI's GPT models.
+It contains utilities to translate text content between different languages.
+"""
+
 import os
+import sys
 from openai import OpenAI
 
 def translate_text(script: str, target_language: str) -> str:
@@ -21,4 +27,4 @@ def translate_text(script: str, target_language: str) -> str:
 
 if __name__ == "__main__":
     print("This script is not meant to be run directly. Run main.py instead.")
-    exit(1)
+    sys.exit(1)

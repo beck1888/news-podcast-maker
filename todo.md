@@ -23,3 +23,11 @@ Ideas for future improvements:
 - Add delays (intro/news/outro) for smoother transitions.
 - Give hosts stronger personalities.
 - use sequential chunks to start making audio files before the script is fully generated and also use multithreading to make each chunk in parallel so it's faster to generate the audio file.
+
+- add a readme
+- lint code
+- update requirements.txt
+- add a license
+- add the credits
+- add a script to auto lint the code
+- auto cleanup

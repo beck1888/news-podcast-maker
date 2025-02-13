@@ -1,11 +1,26 @@
+"""
+Text-to-Speech (TTS) module using OpenAI's API.
+
+This module provides functionality to convert text into speech using OpenAI's TTS API.
+It handles text splitting, audio generation, and combining multiple audio segments
+with appropriate silence intervals between them.
+
+Main features:
+- Text to speech conversion using OpenAI's TTS API
+- Support for different voices
+- Automatic handling of line breaks
+- Temporary file management for audio processing
+"""
+
 # Python standard libraries
 from typing import Any
 import uuid
 import os
+import sys
+from pathlib import Path
 
 # 3rd party imports
 from openai import OpenAI
-from pathlib import Path
 from pydub import AudioSegment
 
 def gen_speech(text: str, voice: str = "nova") -> str:
@@ -15,7 +30,7 @@ def gen_speech(text: str, voice: str = "nova") -> str:
     client: Any = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
     cache_dir: Path = Path(__file__).parent / ".tmp"
     cache_dir.mkdir(exist_ok=True)
-    
+
     # Split the text by lines & initialize segments along with silence between segments
     lines = text.split('\n')
     audio_segments: list[AudioSegment] = []
@@ -42,4 +57,4 @@ def gen_speech(text: str, voice: str = "nova") -> str:
 
 if __name__ == "__main__":
     print("This script is not meant to be run directly. Run main.py instead.")
-    exit(1)
+    sys.exit(1)

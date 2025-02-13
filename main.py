@@ -1,13 +1,16 @@
+"""
+News Podcast Maker - A tool to automatically generate news podcasts.
+This module serves as the main entry point, orchestrating the process
+of fetching news, generating scripts, and creating audio content.
+"""
 # Python standard libraries
 import time
 from typing import List, Dict, Any
-import os
 
 # Import local modules
 from terminal import spinner
 from news_fetcher import fetch_news
 from ai_script_writer import write_script
-from translate import translate_text
 from tts import gen_speech
 from audio_merge import generate_mixed_audio
 
