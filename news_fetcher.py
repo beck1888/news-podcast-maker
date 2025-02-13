@@ -23,7 +23,7 @@ def get_full_article(url):
         return "Error retrieving full article."
 
 def fetch_news(country="us", max_articles=5) -> list[dict[str, str]]:
-    import time; time.sleep(5) # Tee hee debug me if you can
+    # import time; time.sleep(5) # Tee hee debug me if you can
     """
     Fetches top headlines from NewsAPI for a specified country and returns a structured list of articles. Spinner is recommended for this function.
 
