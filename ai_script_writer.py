@@ -2,24 +2,22 @@
 import os
 import datetime
 import random
+from typing import Any, List, Dict, Tuple
 
-# Importing the required libraries
+# 3rd party imports
 from openai import OpenAI
 
-# Helper functions
 def get_current_date() -> str:
-    """
-    Gets the current date and time in a human-readable format.
-    """
-    return datetime.datetime.now().strftime("%A, %B %d, %Y %I:%M %p")
+    current_time: datetime.datetime = datetime.datetime.now()
+    return current_time.strftime("%A, %B %d, %Y %I:%M %p")
 
 def pick_voice() -> str:
-    voices = ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer']
+    voices: List[str] = ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer']
     return random.choice(voices)
 
 def get_personality(voicename: str) -> str:
-    personalities = {
-        'alloy': 'indifferent but informative ',
+    personalities: Dict[str, str] = {
+        'alloy': 'indifferent but informative',
         'ash': 'contemplative and thoughtful',
         'coral': 'dramatic and engaging',
         'echo': 'monotone yet effective',
@@ -29,31 +27,56 @@ def get_personality(voicename: str) -> str:
         'sage': 'hyper and whimsical',
         'shimmer': 'calm and soothing'
     }
-    return personalities[voicename]
+    return personalities.get(voicename, "neutral")
 
-# Function to write the script
-def write_script(news: list[dict[str, str]], language: str = 'en') -> tuple[list[dict[str, str]], str]:
-    # Initialize the OpenAI API
-    client = OpenAI(
-        api_key=os.getenv("OPENAI_API_KEY")
-    )
 
-    # Get the host's name
-    hosts_name = pick_voice()
+def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str, str]:
+    """
+    Generates a news script based on the provided top 5 stories.
 
-    # Write the script
-    full_api_response = client.chat.completions.create(
+    Args:
+        news (List[Dict[str, str]]): A list of dictionaries, each containing 'publisher', 'headline', and 'content'.
+        language (str, optional): The language for the script. Defaults to English ('en').
+
+    Returns:
+        Tuple[str, str]: The generated script and the name of the host.
+    """
+    
+    # Initialize OpenAI client
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    
+    # Get the host's name and personality
+    host_name = pick_voice()
+    host_personality = get_personality(host_name)
+    
+    # Define system instructions
+    instructions = [
+        "You are a news anchor. Write an engaging briefing-style script about the top 5 stories.",
+        "Only include text to be spoken aloud without cues or directions.",
+        "Include the news outlet for each story.",
+        f"It is currently {get_current_date()}. Your name is {host_name} and your personality is {host_personality}. You are a host for The Rundown.",
+        "Ensure smooth transitions between stories, and include an introduction and conclusion."
+    ]
+    
+    # Format instructions into system messages
+    system_messages = [{"role": "system", "content": instruction} for instruction in instructions]
+    
+    # Construct the user message with news content
+    user_message = {
+        "role": "user",
+        "content": "\n\n".join(
+            [f"{article['publisher']}: {article['headline']}\n{article['content']}" for article in news]
+        )
+    }
+    
+    # Send API request
+    response = client.chat.completions.create(
         model="gpt-4o-mini",
-        messages=[
-            {"role": "system", "content": "You are a news anchor. Write an engaging and well flowing briefing style script informing the audience about the following top 5 stories they need to know."},
-            {"role": "system", "content": "Only write the parts to be spoken aloud. Do not include cues, directions, who's speaking, etc."},
-            {"role": "system", "content": "Include which news outlet each story is from."},
-            {"role": "system", "content": f"Use the following info to tailor the script to the audience: It is currently {get_current_date()}. Your name is {hosts_name}. Your personality is {get_personality(hosts_name)} You are a host for the news channel: The Rundown."},
-            {"role": "system", "content": "Make sure to include a smooth transition between each story. Include an introduction and conclusion as well."},
-            {"role": "user", "content": "\n\n".join([f"{article['publisher']}: {article['headline']}\n{article['content']}" for article in news])}
-        ],
-        temperature=0.7 # Higher temperature means more randomness but better creativity (might be bad for news - we'll see)
+        messages=system_messages + [user_message],
+        temperature=0.7
     )
-    script = full_api_response.choices[0].message.content
+    
+    # Extract the generated script
+    script = response.choices[0].message.content
 
-    return script, hosts_name # Return the script and the host's name both for use in the audio generation
+    return script, host_name

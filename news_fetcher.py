@@ -1,14 +1,15 @@
-# Built-in/3rd party imports
+# Python Standard Libraries
 import os
+from typing import List, Dict
+
+# 3rd party imports
 import requests
 from bs4 import BeautifulSoup
 
-# Custom module imports
-from terminal import Log as log
 
-def get_full_article(url):
+def get_full_article(url: str) -> str:
     """
-    Fetches and extracts the full text of an article given its URL.
+    Fetch and extract the full text of an article given its URL.
     """
     try:
         response = requests.get(url, timeout=10)
@@ -19,11 +20,9 @@ def get_full_article(url):
         paragraphs = [p.get_text() for p in soup.find_all("p")]
         return "\n".join(paragraphs)
     except Exception as e:
-        log.error(f"Error fetching full article: {e}")
-        return "Error retrieving full article."
+        raise e
 
-def fetch_news(country="us", max_articles=5) -> list[dict[str, str]]:
-    # import time; time.sleep(5) # Tee hee debug me if you can
+def fetch_news(country: str = "us", max_articles: int = 5) -> List[Dict[str, str]]:
     """
     Fetches top headlines from NewsAPI for a specified country and returns a structured list of articles. Spinner is recommended for this function.
 
@@ -37,26 +36,22 @@ def fetch_news(country="us", max_articles=5) -> list[dict[str, str]]:
         "country": country,
         "pageSize": max_articles + 1,  # Why? Who knows? ¯\_(ツ)_/¯ (it didn't work without this)
     }
-    log.info("Endpoint created")
 
     # Make the call
     response = requests.get(url, params=params)
     if response.status_code != 200:
-        log.error("Failed to fetch news: " + str(response.status_code))
-        return []
+        raise Exception("Failed to fetch news: " + response.text)
     
     data = response.json()
 
     if response.status_code != 200 or data.get("status") != "ok":
-        log.error("Failed to fetch news: " + data.get("status"))
-        return []
+        raise Exception("Failed to fetch news: " + data.get("message", "Unknown error"))
 
     articles = data.get("articles", [])
     if not articles:
-        log.warning("No articles fetched. Returning empty list.")
-        return []
+        raise Exception("No articles found in response")
 
-    structured_articles = []
+    structured_articles: List[Dict[str, str]] = []
     
     for article in articles:
         publisher = article.get("source", {}).get("name", "Unknown Publisher")
@@ -71,10 +66,9 @@ def fetch_news(country="us", max_articles=5) -> list[dict[str, str]]:
             "content": full_content
         })
     
-    log.info("Fetched " + str(len(structured_articles)) + " articles.")
     return structured_articles
 
-def pretty_print(news: list[dict[str, str]]) -> None:
+def pretty_print(news: List[Dict[str, str]]) -> None:
     """
     Pretty prints the news articles.
 
@@ -85,7 +79,3 @@ def pretty_print(news: list[dict[str, str]]) -> None:
         print(f"   Publisher: {article['publisher']}")
         print(f"   Content: {article['content']}")
         print()
-
-if __name__ == "__main__":
-    news = fetch_news()
-    pretty_print(news)
