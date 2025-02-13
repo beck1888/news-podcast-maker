@@ -7,7 +7,7 @@ from terminal import spinner, Log as log
 from news_fetcher import fetch_news
 
 # Settings
-log.DO_LOG = False # Disable logging globally
+log.DO_LOG = False # Global log setting
 
 # Main function
 def main() -> None:
