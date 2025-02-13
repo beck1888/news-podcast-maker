@@ -29,5 +29,4 @@ Ideas for future improvements:
 - update requirements.txt
 - add a license
 - add the credits
-- add a script to auto lint the code
 - auto cleanup
