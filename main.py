@@ -5,6 +5,7 @@
 # Import local modules
 from terminal import spinner, Log as log
 from news_fetcher import fetch_news
+from ai_script_writer import write_script
 
 # Settings
 log.DO_LOG = False # Global log setting
@@ -24,8 +25,12 @@ def main() -> None:
     with spinner("Fetching news...", "News fetched!"):
         news = fetch_news()
 
-    # Print news
-    print(news)
+    # Write script
+    with spinner("Writing script...", "Script written!"):
+        script = write_script(news)
+
+    # Print the script
+    print(script)
 
 # Entry point
 if __name__ == "__main__":

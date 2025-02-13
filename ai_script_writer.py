@@ -27,7 +27,7 @@ def write_script(news: list[dict[str, str]]) -> list[dict[str, str]]:
     response = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role": "system", "content": "You are a news anchor. Write a daily briefing style script informing the audience about the following news articles."},
+            {"role": "system", "content": "You are a news anchor. Write a daily briefing style script informing the audience about the following top 5 stories they need to know."},
             {"role": "system", "content": "Only write the parts to be spoken aloud. Do not include cues, directions, who's speaking, etc."},
             {"role": "system", "content": "Include who the article is from for each story."},
             {"role": "system", "content": f"Use the following info to tailor the script to the audience: It is currently {get_current_date()}. Your name is Axel. You are the host for Atom News."},
