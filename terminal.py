@@ -92,6 +92,7 @@ def spinner(message: str = "Loading", complete_message: str = None):
 
     spinner_thread = threading.Thread(target=spin)
     spinner_thread.start()
+    start_time: float = time.time()
     try:
         yield
     except:
@@ -101,7 +102,8 @@ def spinner(message: str = "Loading", complete_message: str = None):
         spinner_thread.join()
         print("\r\033[K", end="", flush=True)
         Cursor.show()
+        elapsed_time = f" ({round(time.time() - start_time, 2)} s)"
         if resulted_in_error:
-            Item.failed(f"[FAILED] {message}", indent=False)
+            Item.failed(f"[FAILED] {message}" + elapsed_time, indent=False)
         else:
-            Item.checked(complete_message, indent=False)
+            Item.checked(complete_message + elapsed_time, indent=False)
