@@ -49,7 +49,7 @@ def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_
     
     # Save to clips directory
     clips_dir = os.path.join(os.path.dirname(__file__), 'clips')
-    os.makedirs(clips_dir, exist_ok=True)
+    os.makedirs(clips_dir, exist_ok=True)  # Ensure the clips directory exists
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
     output_path = os.path.join(clips_dir, f"News_Podcast_{timestamp}.mp3")
     final_audio.export(output_path, format="mp3")
@@ -58,5 +58,4 @@ def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_
 
 # # Example usage
 if __name__ == "__main__":
-    output = generate_mixed_audio('/Users/beckorion/Documents/Python/news-podcast-maker/cache/adf4199e-68a5-45b5-a8bf-f1bd7aa159fd.mp3')
-    print(f"Generated audio file: {output}")
+    pass

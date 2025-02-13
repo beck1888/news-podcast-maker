@@ -8,9 +8,10 @@ def gen_speech(text, voice="nova") -> str:
     # Initialize the OpenAI API client
     client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-    # Create the cache directory if it doesn't exist
-    if not os.path.exists(Path(__file__).parent / "cache"):
-        os.makedirs(Path(__file__).parent / "cache")
+    # Create the .tmp directory if it doesn't exist
+    cache_dir = Path(__file__).parent / ".tmp"
+    if not os.path.exists(cache_dir):
+        os.makedirs(cache_dir)
 
     # Split the text by line breaks
     lines = text.split('\n')
@@ -27,7 +28,7 @@ def gen_speech(text, voice="nova") -> str:
             )
 
             # Save the audio file
-            temp_file_path = Path(__file__).parent / "cache" / f"{uuid.uuid4()}.mp3"
+            temp_file_path = cache_dir / f"{uuid.uuid4()}.mp3"
             response.write_to_file(temp_file_path)
             audio_segments.append(AudioSegment.from_mp3(temp_file_path))
 
@@ -37,7 +38,7 @@ def gen_speech(text, voice="nova") -> str:
         combined_audio += segment + silence
 
     # Save the combined audio file
-    final_file_path = Path(__file__).parent / "cache" / f"{uuid.uuid4()}.mp3"
+    final_file_path = cache_dir / f"{uuid.uuid4()}.mp3"
     combined_audio.export(final_file_path, format="mp3")
 
     return final_file_path
