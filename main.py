@@ -27,27 +27,27 @@ def main() -> None:
     with spinner("Writing script...", "Script written!"):
         script: str
         voice: str
-        script, voice = write_script(news)
+        script, voice, headline = write_script(news)
 
-    # Translate script to another language (optional)
-    with spinner("Translating script...", "Script translated!"):
-        target_language: str = "Spanish"  # Example - use full language name
-        script: str = translate_text(script, target_language)
+    # # Translate script to another language (optional)
+    # with spinner("Translating script...", "Script translated!"):
+    #     target_language: str = "Spanish"  # Example - use full language name
+    #     script: str = translate_text(script, target_language)
 
     # Generate speech
-    with spinner("Generating speech...", "Speech generated!"):
+    with spinner("Synthesizing speech...", "Speech synthesized!"):
         speech_file_path: str = gen_speech(script, voice)
 
     # Generate final podcast audio
     with spinner("Generating final audio...", "Final audio generated!"):
-        final_audio_path: str = generate_mixed_audio(speech_file_path)
+        final_audio_path: str = generate_mixed_audio(speech_file_path, title=headline)
 
     # Print final details
     print(f"Total time: {time.time() - start:.2f} seconds")
     print(f"Final audio file: {final_audio_path}")
 
     # Open the final audio file
-    os.system(f"open {final_audio_path}")
+    # os.system(f"open {final_audio_path}")
 
 # Entry point
 if __name__ == "__main__":

@@ -13,6 +13,7 @@ def get_current_date() -> str:
 
 def pick_voice() -> str:
     voices: List[str] = ['alloy', 'ash', 'coral', 'echo', 'fable', 'onyx', 'nova', 'sage', 'shimmer']
+    voices.remove('coral')  # Remove Coral from the list of available voices because it is too dramatic
     return random.choice(voices)
 
 def get_personality(voicename: str) -> str:
@@ -29,8 +30,45 @@ def get_personality(voicename: str) -> str:
     }
     return personalities.get(voicename, "neutral")
 
+def create_headline_for_podcast(script: str) -> str:
+    """
+    Create a headline for the podcast based on the generated script to be used as the title of the podcast episode.
+    """
+    # Initialize the client
+    client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str, str]:
+    # Define the system instructions
+    instructions: list = [
+        "Create a creative title for this podcast episode based on the script provided.",
+        "The title should be between 5-10 words long and should be engaging and informative.",
+        "Only include the title. Do not include any other information."
+    ]
+
+    # Format instructions into the messages
+    system_messages = [{"role": "system", "content": instruction} for instruction in instructions]
+
+    # Construct the user message with the script content
+    user_message = {
+        "role": "user",
+        "content": script
+    }
+
+    # Send the API request
+    response = client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=system_messages + [user_message],
+        temperature=0.7
+    )
+
+    # Extract the generated title
+    title = response.choices[0].message.content
+
+    # Append the date to the title
+    title += f" - {get_current_date()}"
+
+    return title
+
+def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str, str, str]:
     """
     Generates a news script based on the provided top 5 stories.
 
@@ -50,12 +88,13 @@ def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str,
     host_personality = get_personality(host_name)
     
     # Define system instructions
-    instructions = [
+    instructions: list = [
         "You are a news anchor. Write an engaging briefing-style script about the top 5 stories.",
         "Only include text to be spoken aloud without cues or directions.",
         "Include the news outlet for each story.",
         f"It is currently {get_current_date()}. Your name is {host_name} and your personality is {host_personality}. You are a host for The Rundown.",
-        "Ensure smooth transitions between stories, and include an introduction and conclusion."
+        "Ensure smooth transitions between stories, and include an introduction and conclusion.",
+        "Add a 2 new lines between each story and section for clarity."
     ]
     
     # Format instructions into system messages
@@ -79,4 +118,7 @@ def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str,
     # Extract the generated script
     script = response.choices[0].message.content
 
-    return script, host_name
+    # Generate a headline for the podcast episode
+    headline = create_headline_for_podcast(script)
+
+    return script, host_name, headline

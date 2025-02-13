@@ -1,13 +1,32 @@
 import os
 import random
+import re
 from datetime import datetime
 from typing import Optional
 from pydub import AudioSegment
 
+def sanitize_filename(filename: str) -> str:
+    """
+    Convert a string into a safe filename by:
+    - Removing or replacing invalid characters
+    - Converting to lowercase
+    - Replacing spaces with underscores
+    - Removing multiple consecutive underscores
+    """
+    # Replace invalid characters with underscore
+    filename = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    # Replace spaces and multiple underscores with single underscore
+    filename = re.sub(r'[\s_]+', '_', filename)
+    # Remove leading/trailing underscores and convert to lowercase
+    filename = filename.strip('_').lower()
+    # If filename is empty after sanitization, use default
+    return filename if filename else 'untitled'
+
 def generate_mixed_audio(speech_path: str, 
                          intro_path: str = "public/news-intro.mp3", 
                          bgm_path: Optional[str] = None, 
-                         outro_path: str = "public/news-outro.mp3") -> str:
+                         outro_path: str = "public/news-outro.mp3",
+                         title: str = "The Rundown News") -> str:
     """
     Generate the final podcast audio by mixing speech with intro, outro, and background music.
     """
@@ -18,6 +37,7 @@ def generate_mixed_audio(speech_path: str,
             'public/background-music_3.mp3'
         ]
         bgm_path = random.choice(options)
+
 
     intro = AudioSegment.from_file(intro_path)
     speech = AudioSegment.from_file(speech_path)
@@ -46,7 +66,8 @@ def generate_mixed_audio(speech_path: str,
     clips_dir = os.path.join(os.path.dirname(__file__), 'clips')
     os.makedirs(clips_dir, exist_ok=True)
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    output_path = os.path.join(clips_dir, f"News_Podcast_{timestamp}.mp3")
+    safe_title = sanitize_filename(title)
+    output_path = os.path.join(clips_dir, f"{safe_title}_{timestamp}.mp3")
     final_audio.export(output_path, format="mp3")
     
     return output_path
