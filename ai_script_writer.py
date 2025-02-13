@@ -36,10 +36,17 @@ def write_script(news: list[dict[str, str]], language: str = 'en') -> list[dict[
         ],
         temperature=0.75
     )
+    full_api_response = response
     script = response.choices[0].message.content
     log.info("Script written")
 
     # Log the script in case it has warnings (possible openai content violations - idk yet but anything with like violence could be bad) and needs to be reviewed by a human
+    log_filename = datetime.datetime.now().strftime("logs/script_%Y_%m_%d_%H_%M_%S.log") # Log file name with timestamp as filesafe chars
+    with open(log_filename, 'w') as f:
+        f.write(get_current_date()) # Add the current date and time for reference
+        f.write('\n\n') # Add a newline for readability
+        f.write(full_api_response) # Because otherwise it'll just be the text not the metadata which is useless!
+        f.write('\n\n') # Add a newline for readability
 
 
     return script
