@@ -44,7 +44,7 @@ def main() -> None:
 
     # Print final details
     print(f"Total time: {time.time() - start:.2f} seconds")
-    print(f"Final audio file: {final_audio_path}")
+    print(f"Final audio file: '{final_audio_path}'")
 
     # Open the final audio file
     # os.system(f"open {final_audio_path}")
