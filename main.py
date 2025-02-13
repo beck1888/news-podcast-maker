@@ -1,6 +1,7 @@
 # Import libraries
 
 # Import built-in libraries
+import time
 
 # Import local modules
 from terminal import spinner, Log as log
@@ -18,6 +19,7 @@ def main() -> None:
     """
     Main function to run the news fetcher.
     """
+    start = time.time()
     # log.info("Program ready!")
     # await_press_enter()
 
@@ -30,7 +32,8 @@ def main() -> None:
 
     # Write script
     with spinner("Writing script...", "Script written!"):
-        script = write_script(news) # We write the script in English because OpenAI's models perform better in English (and the news articles are in English)
+        # We write the script in English because OpenAI's models perform better in English (and the news articles are in English)
+        script, voice = write_script(news) #  also catching the voice for the script to use on speech generation
 
     # Skip this for now so it can run in an automated mode
     # # Translate script to Spanish (for example)
@@ -42,12 +45,13 @@ def main() -> None:
 
     # Generate speech
     with spinner("Generating speech...", "Speech generated!"):
-        speech_file_path = gen_speech(script)
+        speech_file_path = gen_speech(script, voice)
 
     # Generate final podcast audio
     with spinner("Generating final audio...", "Final audio generated!"):
         final_audio_path = generate_mixed_audio(speech_file_path)
 
+    print(f"Total time: {time.time() - start:.2f} seconds")
     print(f"Final audio file: {final_audio_path}")
 
 # Entry point

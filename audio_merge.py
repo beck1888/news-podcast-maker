@@ -2,8 +2,19 @@ import os
 import tempfile
 from pydub import AudioSegment
 from datetime import datetime
+import random
 
-def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_path="public/background-music.mp3", outro_path="public/news-outro.mp3"):
+def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_path=None, outro_path="public/news-outro.mp3"):
+    # Get random background music if not provided
+    if bgm_path is None:
+        options = [
+            'public/background-music_1.mp3',
+            'public/background-music_2.mp3',
+            'public/background-music_3.mp3'
+        ]
+        bgm_path = random.choice(options)
+    
+    
     # Load audio files
     intro = AudioSegment.from_file(intro_path)
     speech = AudioSegment.from_file(speech_path)
@@ -11,12 +22,20 @@ def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_
     outro = AudioSegment.from_file(outro_path)
     
     # Adjust background music volume and apply fades
-    bgm = bgm - 50  # Reduce volume to be soft
+    bgm = bgm - 20  # Reduce volume to be soft
     bgm = bgm.fade_in(1000)  # Quick fade in over 1 second
+
+    # Reduce volume of intro and outro
+    intro = intro - 10
+    outro = outro - 10
     
-    # Loop background music to match speech length
-    bgm_looped = bgm * (len(speech) // len(bgm) + 1)
-    bgm_looped = bgm_looped[:len(speech)]  # Trim to exact speech length
+    # Loop background music to match speech length with seamless fades
+    bgm_segments = []
+    segment_duration = len(bgm) - 3000  # Duration minus 3 seconds for fade out/in
+    while sum(len(segment) for segment in bgm_segments) < len(speech):
+        segment = bgm[:segment_duration].fade_out(1500).fade_in(1500)
+        bgm_segments.append(segment)
+    bgm_looped = sum(bgm_segments, AudioSegment.silent(duration=0))[:len(speech)]  # Trim to exact speech length
     
     # Apply fade out 10 seconds before the end
     fade_out_duration = min(10000, len(bgm_looped))  # Ensure fade duration is not longer than the track
@@ -38,11 +57,6 @@ def generate_mixed_audio(speech_path, intro_path = "public/news-intro.mp3", bgm_
     return output_path
 
 # # Example usage
-# if __name__ == "__main__":
-#     intro = "path/to/intro.mp3"
-#     speech = "path/to/speech.mp3"
-#     bgm = "path/to/background.mp3"
-#     outro = "path/to/outro.mp3"
-    
-#     output = generate_mixed_audio(intro, speech, bgm, outro)
-#     print(f"Generated audio file: {output}")
+if __name__ == "__main__":
+    output = generate_mixed_audio('/Users/beckorion/Documents/Python/news-podcast-maker/cache/adf4199e-68a5-45b5-a8bf-f1bd7aa159fd.mp3')
+    print(f"Generated audio file: {output}")
