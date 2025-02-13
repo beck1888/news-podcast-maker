@@ -39,3 +39,7 @@ def gen_speech(text: str, voice: str = "nova") -> str:
     final_file_path: Path = cache_dir / f"{uuid.uuid4()}.mp3"
     combined_audio.export(final_file_path, format="mp3")
     return str(final_file_path)
+
+if __name__ == "__main__":
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)

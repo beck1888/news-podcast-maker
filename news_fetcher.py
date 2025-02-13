@@ -79,3 +79,7 @@ def pretty_print(news: List[Dict[str, str]]) -> None:
         print(f"   Publisher: {article['publisher']}")
         print(f"   Content: {article['content']}")
         print()
+
+if __name__ == "__main__":
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)

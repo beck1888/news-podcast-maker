@@ -80,3 +80,7 @@ def spinner(message: str = "Loading", complete_message: str = None) -> Generator
             Item.failed(f"[FAILED] {message}{elapsed_time}", indent=False)
         else:
             Item.checked(f"{complete_message}{elapsed_time}", indent=False)
+
+if __name__ == "__main__":
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)

@@ -73,4 +73,5 @@ def generate_mixed_audio(speech_path: str,
     return output_path
 
 if __name__ == "__main__":
-    pass
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)

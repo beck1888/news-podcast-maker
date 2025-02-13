@@ -122,3 +122,7 @@ def write_script(news: List[Dict[str, str]], language: str = 'en') -> Tuple[str,
     headline = create_headline_for_podcast(script)
 
     return script, host_name, headline
+
+if __name__ == "__main__":
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)

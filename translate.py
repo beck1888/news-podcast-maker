@@ -18,3 +18,7 @@ def translate_text(script: str, target_language: str) -> str:
 
     translated_script: str = response.choices[0].message.content
     return translated_script
+
+if __name__ == "__main__":
+    print("This script is not meant to be run directly. Run main.py instead.")
+    exit(1)
