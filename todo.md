@@ -1,11 +1,6 @@
 ideas of things to add
 
-- more voices
-- randomly choose a host
-- give the hosts personalities (e.g. one is always angry, one is always happy, maybe a southern one lol)
 - ad breaks (fake ads for now) - sfx in between the breaks and transitions [https://pixabay.com/sound-effects/news-broadcast-logo-154234/]
-- maybe gen audio for each story segment one by one to avoid the audio cutting off because the script is too long
-- add more music options too (and maybe a custom jingle?)
 
 
 - add credits
@@ -18,3 +13,10 @@ bgm 3: Music by <a href="https://pixabay.com/users/musicinmedia-43224764/?utm_so
 - add a disclaimer at the end of the show
 - add a better logging system
 - add something to auto clean up the audio files
+- auto create directories if they don't exist for things like temp
+- turn down music volume
+- make a website for people to preview the project
+- add a setup script so people can easily get started
+- monitor when new news comes in to make sure the show isn't making duplicate news episodes
+- GUI
+- ask the user if they want to play the news episode after it's done or save it or send it

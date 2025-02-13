@@ -36,12 +36,12 @@ def main() -> None:
         script, voice = write_script(news) #  also catching the voice for the script to use on speech generation
 
     # Skip this for now so it can run in an automated mode
-    # # Translate script to Spanish (for example)
-    # if input("Translate script to Spanish? (y/n): ").lower() == "y":
-    #     with spinner("Translating script...", "Script translated!"):
-    #         script = translate_text(script, "Spanish (Mexico)")
-    # else:
-    #     log.info("Script not translated")
+    # Translate script to Spanish (for example)
+    if input("Translate script to Spanish? (y/n): ").lower() == "y":
+        with spinner("Translating script...", "Script translated!"):
+            script = translate_text(script, "Spanish (Mexico)")
+    else:
+        log.info("Script not translated")
 
     # Generate speech
     with spinner("Generating speech...", "Speech generated!"):
