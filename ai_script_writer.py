@@ -18,17 +18,17 @@ def pick_voice() -> str:
 
 def get_personality(voicename: str) -> str:
     personalities: Dict[str, str] = {
-        'alloy': 'indifferent but informative',
-        'ash': 'contemplative and thoughtful',
-        'coral': 'dramatic and engaging',
-        'echo': 'monotone yet effective',
-        'fable': 'quirky and fun',
-        'onyx': 'authoritative',
-        'nova': 'happy and upbeat',
-        'sage': 'hyper and whimsical',
-        'shimmer': 'calm and soothing'
+        'alloy': 'neutral and pragmatic, delivering information with a straightforward and no-nonsense tone',
+        'ash': 'philosophical and introspective, often pondering deeper meanings and abstract ideas',
+        'coral': 'expressive and theatrical, speaking with passion and a flair for storytelling',
+        'echo': 'robotic and efficient, conveying information in a precise and calculated manner',
+        'fable': 'witty and playful, often using humor and charm to engage in conversations',
+        'onyx': 'commanding and authoritative, exuding confidence and certainty in speech',
+        'nova': 'cheerful and energetic, always enthusiastic and ready to uplift any conversation',
+        'sage': 'eccentric and whimsical, with a lively imagination and a penchant for the unexpected',
+        'shimmer': 'gentle and serene, speaking in a soothing and reassuring manner'
     }
-    return personalities.get(voicename, "neutral")
+    return personalities.get(voicename, 'neutral and balanced, adapting to the context of the conversation')
 
 def create_headline_for_podcast(script: str) -> str:
     """
