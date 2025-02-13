@@ -37,9 +37,10 @@ def main() -> None:
 
     # Skip this for now so it can run in an automated mode
     # Translate script to Spanish (for example)
-    if input("Translate script to Spanish? (y/n): ").lower() == "y":
+    if input("Change language (y/n): ").lower() == "y":
+        user_target_language = input("Enter target language: ")
         with spinner("Translating script...", "Script translated!"):
-            script = translate_text(script, "Spanish (Mexico)")
+            script = translate_text(script, user_target_language)
     else:
         log.info("Script not translated")
 

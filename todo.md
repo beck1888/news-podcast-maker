@@ -20,3 +20,9 @@ bgm 3: Music by <a href="https://pixabay.com/users/musicinmedia-43224764/?utm_so
 - monitor when new news comes in to make sure the show isn't making duplicate news episodes
 - GUI
 - ask the user if they want to play the news episode after it's done or save it or send it
+- use a more reliable method to split the audio files into more manageable chunks because the current method is not reliable (line breaks rather than like a list)
+- add metadata to the audio files like an image and a description and a title and a date and a time
+- maybe use AI to name the audio files better/ more relevantly
+- more music options
+- delay between intro and news then also for between news and outro (sounds nicer)
+- give the hosts stronger personalities
