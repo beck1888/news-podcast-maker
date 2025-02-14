@@ -26,7 +26,7 @@ def get_full_article(url: str) -> str:
         paragraphs = [p.get_text() for p in soup.find_all("p")]
         return "\n".join(paragraphs)
     except requests.RequestException as e:
-        raise requests.RequestException(f"Failed to fetch article: {str(e)}") from e
+        return "Failed to retrieve full article. Just read the headline and existing content instead and move on."
 
 def fetch_news(country: str = "us", max_articles: int = 5) -> List[Dict[str, str]]:
     """
