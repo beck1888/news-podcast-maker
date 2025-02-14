@@ -72,11 +72,8 @@ def generate_mixed_audio(speech_path: str,
     Generate the final podcast audio by mixing speech with intro, outro, and background music.
     """
     if bgm_path is None:
-        bgm_path = random.choice([
-            'public/background-music_1.mp3',
-            'public/background-music_2.mp3',
-            'public/background-music_3.mp3'
-        ])
+        bgm_files = [f'public/background-music_{i}.mp3' for i in range(1, 10)]
+        bgm_path = random.choice(bgm_files)
 
     # Load audio segments
     audio_segments = {

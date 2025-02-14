@@ -45,19 +45,19 @@ def main() -> None:
     # Generate final podcast audio
     with spinner("Generating final audio...", "Final audio generated!"):
         # The clip is also saved in the 'clips' directory as backup
-        final_audio_path: str = generate_mixed_audio(speech_file_path, title=headline)
+        final_audio_path: str = generate_mixed_audio(speech_file_path, title=headline.capitalize())
 
     # Cleanup temporary files
     with spinner("Cleaning up temporary files...", "Temporary files cleaned!"):
         cleanup_directory() # Cleanup all temporary files by default
 
     # Clone the final audio file to the user's downloads folder (assuming macOS)
-    os.system(f"cp {final_audio_path} ~/Downloads")
+    # os.system(f"cp {final_audio_path} ~/Downloads")
 
     # Print final details
     print(f"Total time: {time.time() - start:.2f} seconds")
     print(f"Final audio file: '{final_audio_path}'")
-    print("The final audio file has been copied to your Downloads folder.")
+    # print("The final audio file has been copied to your Downloads folder.")
 
     # Open the final audio file
     # os.system(f"open {final_audio_path}")
